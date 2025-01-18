@@ -1,0 +1,27 @@
+name: KinD Cluster Setup
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+
+    steps:
+      - name: Checking the repository
+        uses: actions/checkout@v4
+
+      - name: Create k8s Kind Cluster
+        uses: container-tools/kind-action@1
+
+      - name: Get Cluster Info
+        run: kubectl cluster-info --context kind
+
+      - name: Check number of nodes
+        run: kubectl get nodes
+
+      - name: Check
+        run: kubectl get pods -A
