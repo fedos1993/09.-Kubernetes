@@ -1,4 +1,4 @@
-name: KinD Cluster Setup
+name: Minikube Cluster Setup
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  setup-kind-cluster:
+  setup-minikube-cluster:
     runs-on: ubuntu-latest
 
 
@@ -14,19 +14,20 @@ jobs:
       - name: Checking the repository
         uses: actions/checkout@v4
 
-      - name: Create k8s Kind Cluster
-        uses: helm/kind-action@v1
+      - name: Setup Minikube
+        uses: manusa/actions-setup-minikube@v2.13.1
         with:
-          cluster_name: kind-cluster
+          minikube version: 'v1.35.0'
+          kubernetes version: 'v1.32.0'
 
       - name: Get Cluster Info
-        run: kubectl cluster-info --context kind-kind-cluster
+        run: kubectl cluster-info --context minikube
+
+      - name: Get Kubernetes Version
+        run: kubectl version
 
       - name: Check number of nodes
         run: kubectl get nodes
 
       - name: List all pods in the cluster
         run: kubectl get pods -A
-
-      - name: Get Kubernetes Version
-        run: kubectl version
